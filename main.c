@@ -28,7 +28,7 @@ int main(void) {
     // Main-loop: Toggle LED7 hvert sekund
     while(1) {
         toggleLED(7);
-        _delay_ms(500);
+        _delay_ms(100);
     }
 }
 

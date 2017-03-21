@@ -1,0 +1,1 @@
+avrdude -CavrdudeWin.conf -v -patmega2560 -cwiring -PCOM4 -b115200 -D -Uflash:w:cmake-build-debug\atmega2560test
