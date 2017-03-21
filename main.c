@@ -1,3 +1,4 @@
+/*
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -84,4 +85,72 @@ void initTimer1() {
     OCR1A = 15625;
     // Enable Timer1 Compare Match interrupt (A-system)
     TIMSK1 |= 0b00000010;
+}*/
+
+
+/********************************************
+* MSYS, LAB 12                              *
+* Test program for Interrupt driven UART    *
+* driver.                                   *
+*                                           *
+* Henning Hargaard 13/11 2015               *
+*********************************************/
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include "uart_int.h"
+#include "led.h"
+#include "lm75.h"
+#include "esp8266.h"
+
+ISR (USART0_RX_vect)
+{
+    char modtaget_tegn;
+
+    // Aflæs UART modtage-register
+    modtaget_tegn = UDR0;
+    // Reager kun på lovlige tegn
+    if ((modtaget_tegn >= '0') && (modtaget_tegn <= '7'))
+    {
+        // Toggle aktuelle lysdiode
+        toggleLED(modtaget_tegn - '0');
+        // Send streng "LED nummer x er toggled"
+        SendString("LED nummer ", 0);
+        SendChar(modtaget_tegn, 0);
+        SendString(" er toggled\r\n", 0);
+    }
+}
+
+int main()
+{
+    int temp;
+
+    // Initier UART (med RX interrupt enable)
+    InitUART(9600, 8, 'N', 1, 0);
+//    InitUART(9600, 8, 'N', 1, 1);
+
+    // Global interrupt enable
+    sei();
+    // Initier LED port
+//    initLEDport();
+    // Initier temperatur sensor
+//    LM75_init();
+    SendString("Hello terminal\r\n", 0);
+    initWiFi();
+    while (1)
+    {
+        // Aflæs temperaturen (OBS: Enhed = halve grader)
+        /*temp = LM75_temperature(0);
+        // Vis i formatet "26,5 grader" (og linieskift)
+        SendInteger(temp/2, 0);
+        SendChar(',', 1);
+        if (temp & 0b00000001)
+            SendChar('5', 0);
+        else
+            SendChar('0', 0);
+        SendString(" grader\r", 0);*/
+        testWiFi();
+        // Vent 1 sekund
+        _delay_ms(5000);
+    }
 }

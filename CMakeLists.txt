@@ -18,5 +18,5 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-set(SOURCE_FILES main.c led.c led.h)
+set(SOURCE_FILES main.c led.c led.h lm75.c lm75.h uart_int.c uart_int.h i2c.c i2c.h esp8266.c esp8266.h)
 add_executable(atmega2560test ${SOURCE_FILES})
